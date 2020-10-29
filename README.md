@@ -13,7 +13,7 @@ The following python packages are required by the class.
     ```bash
     pip3 install pyserial
     ```
-* To enable non-root-access communication with the sutter micropositioner:
+* To enable non-root-access communication with the RND lab Power Supply:
     * Find out the USERNAME using the `whoami` command
     * Add user to the "tty and "dialout" groups 
     ```bash
