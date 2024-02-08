@@ -294,6 +294,17 @@ class kd3305pInstrument(ka3305pInstrument):
             self.serWriteAndRecieve(f"OUT{channel}:1")
         else:
             self.serWriteAndRecieve(f"OUT{channel}:0")
+    
+    def setBeep(self, state):
+        """Turns beeper ON or OFF
+
+        Args:
+            state (bool): True to turn on, False to turn off
+        """
+        if state:
+            self.serWriteAndRecieve("BEEP1")
+        else:
+            self.serWriteAndRecieve("BEEP0")
 
 
 if __name__ == "__main__":
