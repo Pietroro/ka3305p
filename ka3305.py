@@ -170,9 +170,9 @@ class ka3305pInstrument:
         Args:
             state (bool): True to turn on, False to turn off
         """
-        if(state == True):
+        if state:
             self.serWriteAndRecieve("OUT1")
-        elif(state == False):
+        else:
             self.serWriteAndRecieve("OUT0")
     
     def toggleOcp(self, state):
@@ -181,9 +181,9 @@ class ka3305pInstrument:
         Args:
             state (bool): True to turn on, False to turn off
         """
-        if(state == True):
+        if state:
             self.serWriteAndRecieve("OCP1")
-        elif(state == False):
+        else:
             self.serWriteAndRecieve("OCP0")
 
     def setOcp(self, channel, amp, delay=0.1):
@@ -204,9 +204,9 @@ class ka3305pInstrument:
         Args:
             state (bool): True to turn on, False to turn off
         """
-        if(state == True):
+        if state:
             self.serWriteAndRecieve("OVP1")
-        elif(state == False):
+        else:
             self.serWriteAndRecieve("OVP0")
 
     def setOvp(self, channel, voltage, delay=0.1):
@@ -265,11 +265,42 @@ class ka3305pInstrument:
         assert mode in self.modes, "Mode {} does not exist".format(mode)
         self.serWriteAndRecieve("TRACK{}".format(mode))
 
+
+class kd3305pInstrument(ka3305pInstrument):
+    def __init__(self, psu_com):
+        super().__init__(psu_com)
+
+    def setOut(self, state):
+        """Turns both outputs ON or OFF
+
+        Args:
+            state (bool): True to turn on, False to turn off
+        """
+        if state:
+            self.serWriteAndRecieve("OUT1:1\nOUT2:1")
+        else:
+            self.serWriteAndRecieve("OUT1:0\nOUT2:0")
+
+    def setOutCh(self, state, channel):
+        """Turns selected channel ON or OFF
+
+        Args:
+            state (bool): True to turn on, False to turn off
+            channel (int): Channel to set (either 1 or 2)
+        """
+
+        assert channel in self.channels, f"Channel {channel} does not exist"
+        if state:
+            self.serWriteAndRecieve(f"OUT{channel}:1")
+        else:
+            self.serWriteAndRecieve(f"OUT{channel}:0")
+
+
 if __name__ == "__main__":
     # This example is for Ubuntu, in Windows the port will most likely be COM*
     psu = ka3305pInstrument('/dev/ttyUSB0')
     # Connect to PSU
-    if psu.isConnected == True:
+    if psu.isConnected:
         # Get ID
         print(psu.getIdn())
         # Request voltage on channel 1
